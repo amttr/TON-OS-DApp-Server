@@ -1,10 +1,7 @@
 version: '2.3'
 services:
   arangodb:
-    build:
-      context: ./build
-    # image: tonlabs/arango:latest
-    container_name: arangodb
+    image: amttr/tonos-arango:latest
     restart: unless-stopped
     environment:
       ARANGO_NO_AUTH: 1
@@ -25,9 +22,7 @@ services:
 
   arangodbni:
     build:
-      context: ./build
-    # image: tonlabs/arango:latest
-    container_name: arangodbni
+    image: amttr/tonos-arango:latest
     restart: unless-stopped
     environment:
       ARANGO_NO_AUTH: 1
