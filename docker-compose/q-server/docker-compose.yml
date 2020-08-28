@@ -1,10 +1,9 @@
 version: '2.3'
+
 services:
+
   q-server:
-    build:
-      context: ./build
-    # image: tonlabs/q-server:latest
-    container_name: q-server
+    image: amttr/tonos-q-server:latest
     restart: unless-stopped
     environment:
       - VIRTUAL_HOST=q-server
@@ -21,6 +20,7 @@ services:
     expose:
       - "4000"
     mem_limit: 5G
+
 networks:
   proxy_nw:
     external: true
