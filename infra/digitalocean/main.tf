@@ -32,3 +32,13 @@ resource "digitalocean_project" "tonos" {
     digitalocean_droplet.tonos.urn
   ]
 }
+
+resource "local_file" "inventory" {
+  content = templatefile("${path.module}/../templates/inventory.tpl",
+    {
+      tonos_ip   = digitalocean_droplet.tonos.ipv4_address
+      tonos_user = "root"
+    }
+  )
+  filename = "${path.module}/../../ansible/inventory"
+}
