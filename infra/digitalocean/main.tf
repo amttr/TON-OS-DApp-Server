@@ -42,3 +42,17 @@ resource "local_file" "inventory" {
   )
   filename = "${path.module}/../../ansible/inventory"
 }
+
+resource "null_resource" "delay" {
+  provisioner "local-exec" {
+    command = "sleep 120s"
+  }
+}
+
+resource "null_resource" "provision" {
+  provisioner "local-exec" {
+    working_dir = "../../ansible"
+    command     = "ansible-playbook -v playbooks/provision.yml"
+  }
+  depends_on = [null_resource.delay]
+}
