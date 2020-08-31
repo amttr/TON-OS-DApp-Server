@@ -1,0 +1,63 @@
+---
+- hosts: tonos
+  gather_facts: false
+
+  tasks:
+  - name: Install required system packages
+    become: true
+    apt:
+      state: latest
+      update_cache: true
+      name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    tags: docker
+
+  - name: Add Docker GPG apt key
+    become: true
+    apt_key:
+      state: present
+      url: https://download.docker.com/linux/ubuntu/gpg
+    tags: docker
+
+  - name: Build Docker repository reference
+    become: true
+    changed_when: false
+    shell: echo deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+    register: docker_repo
+    tags: docker
+
+  - name: Add Docker repository
+    become: true
+    apt_repository:
+      state: present
+      mode: 0600
+      repo: "{{ docker_repo.stdout }}"
+    tags: docker
+
+  - name: Install docker-ce
+    become: true
+    apt:
+      state: latest
+      update_cache: true
+      name: docker-ce
+    tags: docker
+
+  - name: Enable and start docker service
+    become: true
+    changed_when: false
+    service:
+      name: docker
+      enabled: true
+      state: restarted
+    tags: docker
+
+  - name: Refresh groups (reset connection)
+    changed_when: false
+    delegate_to: localhost
+    file:
+      path: ~/.ansible/cp
+      state: absent
+    tags: docker
