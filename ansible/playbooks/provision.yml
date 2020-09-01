@@ -7,3 +7,6 @@
 
 - name: Ensure docker-engine environment ready
   import_playbook: ubuntu/bootstrap-docker.yml
+
+- name: Ensure git server ready
+  import_playbook: git-server.yml

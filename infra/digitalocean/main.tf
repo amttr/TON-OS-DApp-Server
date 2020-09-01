@@ -13,7 +13,7 @@ provider "digitalocean" {
 
 resource "digitalocean_ssh_key" "tonos" {
   name       = "tonos"
-  public_key = file(var.ssh_pub_key_path)
+  public_key = file(var.user_ssh_id_path)
 }
 
 resource "digitalocean_droplet" "tonos" {
@@ -36,8 +36,9 @@ resource "digitalocean_project" "tonos" {
 resource "local_file" "inventory" {
   content = templatefile("${path.module}/../templates/inventory.tpl",
     {
-      tonos_ip   = digitalocean_droplet.tonos.ipv4_address
-      tonos_user = "root"
+      tonos_ip        = digitalocean_droplet.tonos.ipv4_address
+      tonos_user      = "root"
+      git_ssh_id_path = var.git_ssh_id_path
     }
   )
   filename = "${path.module}/../../ansible/inventory"

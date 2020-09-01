@@ -1,0 +1,89 @@
+---
+- hosts: tonos
+  gather_facts: false
+
+  tasks:
+  - name: Get git-shell path
+    changed_when: false
+    shell: which git-shell
+    register: git_shell
+    tags: git
+
+  - name: Create git group
+    become: true
+    group:
+      name: git
+      system: true
+    tags: git
+
+  - name: Create git user
+    become: true
+    user:
+      name: git
+      group: git
+      system: true
+      password_lock: true
+      shell: "{{ git_shell.stdout }}"
+    tags: git
+
+  - name: Get public key
+    delegate_to: localhost
+    set_fact:
+      git_public_key: "{{ lookup('file', git_ssh_id_path + '.pub') }}"
+    tags:
+    - git
+    - git-authorized-keys
+
+  - name: Append public key to known_hosts
+    become: true
+    authorized_key:
+      user: git
+      key: "{{ git_public_key }}"
+    tags:
+    - git
+    - git-authorized-keys
+
+  - name: Create git repos storage
+    become: true
+    file:
+      name: /srv/git
+      state: directory
+      owner: git
+      group: git
+    tags:
+    - git
+    - git-repos
+
+  - name: Create git repos storage link
+    become: true
+    file:
+      name: /repos
+      src: /srv/git
+      state: link
+    tags:
+    - git
+    - git-repos
+
+  - name: Create git repos paths
+    become: true
+    become_user: git
+    file:
+      name: /repos/{{ item }}.git
+      state: directory
+      mode: u=xrw,g=xr,o=x
+    with_items: "{{ git_server_repos|default([]) }}"
+    tags:
+    - git
+    - git-repos
+
+  - name: Deploy bare git repos
+    become: true
+    become_user: git
+    command: git init --bare
+    args:
+      chdir: /repos/{{ item }}.git
+      creates: /repos/{{ item }}.git/HEAD
+    with_items: "{{ git_server_repos|default([]) }}"
+    tags:
+    - git
+    - git-repos

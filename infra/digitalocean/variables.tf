@@ -2,7 +2,11 @@ variable "do_token" {
   type = string
 }
 
-variable "ssh_pub_key_path" {
+variable "git_ssh_id_path" {
+  type = string
+}
+
+variable "user_ssh_id_path" {
   type = string
 }
 
