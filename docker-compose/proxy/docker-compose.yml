@@ -1,12 +1,15 @@
 version: '2.3'
-
 services:
-
   proxy:
-    image: amttr/tonos-nginx-proxy:latest
+    build:
+      context: ./build
+    #        image: jwilder/nginx-proxy:latest
+    container_name: proxy
     restart: unless-stopped
     labels:
       - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+    security_opt:
+      - label:type:docker_t
     ports:
       - "80:80"
       - "443:443"
@@ -25,9 +28,9 @@ services:
       timeout: 3s
       retries: 3
       start_period: 40s
-
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion:v1.12
+    container_name: letsencrypt
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -36,6 +39,7 @@ services:
       - nw
     volumes_from:
       - proxy
+
 
 networks:
   nw:

@@ -2,6 +2,7 @@ version: '2.3'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:5.3.1
+    container_name: zookeeper
     restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -17,6 +18,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:5.3.1
+    container_name: kafka
     restart: unless-stopped
     depends_on:
       - zookeeper
@@ -45,6 +47,7 @@ services:
       - data:/var/lib/kafka/data
   connect:
     image: confluentinc/cp-kafka-connect:5.3.1
+    container_name: connect
     restart: unless-stopped
     depends_on:
       - zookeeper
@@ -93,6 +96,7 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:5.3.1
     hostname: schema-registry
+    container_name: schema-registry
     restart: unless-stopped
     depends_on:
       - zookeeper
@@ -105,11 +109,17 @@ services:
       SCHEMA_REGISTRY_JMX_PORT: 9582
     networks:
       - proxy_nw
+
+
+    networks:
+      - proxy_nw
     volumes:
       - ./launch.sh:/etc/confluent/docker/launch
 
   check-connect:
-    image: amttr/tonos-check-connect
+    build:
+      context: build_check
+    container_name: check-connect
     restart: unless-stopped
     depends_on:
       connect:

@@ -1,9 +1,10 @@
 version: '2.2'
-
 services:
-
   node:
-    image: amttr/tonos-ton-node
+    build:
+      context: ./build
+    # image: "${NODE_IMAGE}"
+    container_name: rnode
     restart: unless-stopped
     environment:
       ADNL_PORT:
@@ -31,7 +32,8 @@ services:
       options:
         max-size: "1000m"
         max-file: "100"
-
+    cap_add:
+      - SYS_PTRACE
 networks:
   proxy_nw:
     external: true

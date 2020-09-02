@@ -1,6 +1,8 @@
 version: '2.2'
 services:
   statsd:
+    #        build:
+    #            context: ./build
     image: "${IMAGE}"
     container_name: statsd
     restart: unless-stopped

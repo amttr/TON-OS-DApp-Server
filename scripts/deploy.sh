@@ -43,6 +43,9 @@ for BUNDLE_COMPONENT in proxy web.root arangodb; do
     cd "${DOCKER_COMPOSE_DIR}/${BUNDLE_COMPONENT}/" && docker-compose up -d
 done
 
+rm -rf "${DOCKER_COMPOSE_DIR}/q-server/build/ton-q-server"
+cd "${DOCKER_COMPOSE_DIR}/q-server/build" && git clone "${TON_Q_SERVER_GITHUB_REPO}"
+cd "${DOCKER_COMPOSE_DIR}/q-server/build/ton-q-server" && git checkout "${TON_Q_SERVER_GITHUB_COMMIT_ID}"
 cd "${DOCKER_COMPOSE_DIR}/q-server" && docker-compose up -d
 
 echo "INFO: Waiting for Kafka start..."
@@ -102,6 +105,10 @@ cd "${DOCKER_COMPOSE_DIR}/statsd/" && docker-compose up -d
 
 sed -i "s|ADNL_PORT.*|ADNL_PORT=${ADNL_PORT}|" "${DOCKER_COMPOSE_DIR}/ton-node/.env"
 sed -i "s|NETWORK_TYPE.*|NETWORK_TYPE=${NETWORK_TYPE}|" "${DOCKER_COMPOSE_DIR}/ton-node/.env"
+
+rm -rf "${DOCKER_COMPOSE_DIR}/ton-node/build/ton-node"
+cd "${DOCKER_COMPOSE_DIR}/ton-node/build" && git clone "${TON_NODE_GITHUB_REPO}" ton-node
+cd "${DOCKER_COMPOSE_DIR}/ton-node/build/ton-node" && git checkout "${TON_NODE_GITHUB_COMMIT_ID}"
 
 echo "==============================================================================="
 echo "INFO: starting node on ${HOSTNAME}..."
