@@ -21,5 +21,3 @@ export COMPOSE_HTTP_TIMEOUT=120 # in sec, 60 sec - default
 HOSTNAME=$(hostname -f)
 export TON_Q_SERVER_GITHUB_REPO="https://github.com/tonlabs/ton-q-server"
 export TON_Q_SERVER_GITHUB_COMMIT_ID="master"
-export TON_NODE_GITHUB_REPO="https://github.com/tonlabs/ton-labs-node"
-export TON_NODE_GITHUB_COMMIT_ID="master"
