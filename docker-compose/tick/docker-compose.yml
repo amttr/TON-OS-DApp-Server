@@ -1,0 +1,58 @@
+version: "2.4"
+services:
+  telegraf:
+    image: telegraf
+    hostname: telegraf
+    volumes:
+      - type: bind
+        source: ./config/telegraf.conf
+        target: /etc/telegraf/telegraf.conf
+        read_only: true
+      - type: bind
+        source: /proc
+        target: /host/proc
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    environment:
+      HOST_PROC: /host/proc
+    network_mode: host # for network interface(s) monitoring
+    restart: always
+
+  influxdb:
+    image: influxdb:1.8
+    volumes:
+      - type: bind
+        source: ./config/influxdb.conf
+        target: /etc/influxdb/influxdb.conf
+        read_only: true
+      - type: volume
+        source: influxdb-data
+        target: /var/lib/influxdb
+    environment:
+      INFLUXDB_CONFIG_PATH: /etc/influxdb/influxdb.conf
+    ports:
+      - "8086:8086"
+    restart: always
+
+  chronograf:
+    image: chronograf
+    volumes:
+      - type: volume
+        source: chronograf-data
+        target: /var/lib/chronograf
+    environment:
+      INFLUXDB_URL: http://172.29.0.2:8086 # this one must be accessible from the browser
+      # https://docs.influxdata.com/chronograf/v1.8/administration/managing-security/#configure-github-authentication
+      TOKEN_SECRET: "..."
+      GH_CLIENT_ID: "..."
+      GH_CLIENT_SECRET: "..."
+    ports:
+      - "8888:8888"
+    restart: always
+
+volumes:
+  influxdb-data:
+  chronograf-data:
