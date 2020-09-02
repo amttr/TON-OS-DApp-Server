@@ -18,7 +18,10 @@ services:
         read_only: true
     environment:
       HOST_PROC: /host/proc
-    network_mode: host # for network interface(s) monitoring
+    expose:
+      - "8125/udp"
+    networks:
+      - proxy_nw
     restart: always
 
   influxdb:
@@ -35,6 +38,8 @@ services:
       INFLUXDB_CONFIG_PATH: /etc/influxdb/influxdb.conf
     ports:
       - "8086:8086"
+    networks:
+      - proxy_nw
     restart: always
 
   chronograf:
@@ -51,8 +56,14 @@ services:
       GH_CLIENT_SECRET: "..."
     ports:
       - "8888:8888"
+    networks:
+      - proxy_nw
     restart: always
 
 volumes:
   influxdb-data:
   chronograf-data:
+
+networks:
+  proxy_nw:
+    external: true
