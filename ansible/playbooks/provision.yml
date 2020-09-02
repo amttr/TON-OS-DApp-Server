@@ -1,6 +1,6 @@
 ---
-- name: Ensure system up-to-date
-  import_playbook: ubuntu/upgrade-system.yml
+# - name: Ensure system up-to-date
+#   import_playbook: ubuntu/upgrade-system.yml
 
 - name: Ensure base configuration complete
   import_playbook: ubuntu/bootstrap-base.yml

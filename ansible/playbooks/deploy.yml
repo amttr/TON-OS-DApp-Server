@@ -1,0 +1,62 @@
+---
+- hosts: tonos
+  gather_facts: false
+
+  vars:
+    remote: ssh://{{ ansible_user }}@{{ ansible_host }}/repos/{{ remote_config_repo_name }}.git
+    local_config_path: /tmp/{{ remote_config_repo_name }}
+    remote_config_path: /repos/{{ remote_config_repo_name }}.git
+    working_tree: /opt/{{ remote_config_repo_name }}
+
+  tasks:
+  - name: Remove local configuration
+    delegate_to: localhost
+    changed_when: false
+    file:
+      path: "{{ local_config_path }}"
+      state: absent
+
+  - name: Clone configuration locally
+    delegate_to: localhost
+    changed_when: false
+    command: git clone {{ config_repo }} {{ local_config_path }}
+    tags:
+    - deploy
+    - git-clone
+
+  - name: Add new remote
+    delegate_to: localhost
+    changed_when: false
+    command: git remote add remote {{ remote }}
+    args:
+      chdir: "{{ local_config_path }}"
+    tags:
+    - deploy
+    - git-clone
+    - git-push
+
+  - name: Push to remote
+    delegate_to: localhost
+    changed_when: false
+    command: git push remote -f
+    args:
+      chdir: "{{ local_config_path }}"
+    tags:
+    - deploy
+    - git-clone
+    - git-push
+
+  - name: Update git working tree
+    git:
+      repo: "{{ remote_config_path }}"
+      dest: "{{ working_tree }}"
+      force: true
+      depth: 1
+
+  - name: Deploy the node
+    changed_when: false
+    shell: ./deploy.sh
+    args:
+      chdir: "{{ working_tree }}/scripts"
+    tags:
+    - deploy

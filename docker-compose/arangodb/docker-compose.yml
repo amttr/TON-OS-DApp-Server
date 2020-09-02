@@ -21,7 +21,6 @@ services:
     mem_limit: 32G
 
   arangodbni:
-    build:
     image: amttr/tonos-arango:latest
     restart: unless-stopped
     environment:

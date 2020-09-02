@@ -3,7 +3,6 @@ version: '2.3'
 services:
 
   proxy:
-    build:
     image: amttr/tonos-nginx-proxy:latest
     restart: unless-stopped
     labels:

@@ -31,6 +31,9 @@ resource "digitalocean_project" "tonos" {
   resources = [
     digitalocean_droplet.tonos.urn
   ]
+  depends_on = [
+    digitalocean_droplet.tonos
+  ]
 }
 
 resource "local_file" "inventory" {
@@ -44,16 +47,16 @@ resource "local_file" "inventory" {
   filename = "${path.module}/../../ansible/inventory"
 }
 
-resource "null_resource" "delay" {
-  provisioner "local-exec" {
-    command = "sleep 120s"
-  }
-}
+#resource "null_resource" "delay" {
+#  provisioner "local-exec" {
+#    command = "sleep 120s"
+#  }
+#}
 
-resource "null_resource" "provision" {
-  provisioner "local-exec" {
-    working_dir = "../../ansible"
-    command     = "ansible-playbook -v playbooks/provision.yml"
-  }
-  depends_on = [null_resource.delay]
-}
+#resource "null_resource" "provision" {
+#  provisioner "local-exec" {
+#    working_dir = "../../ansible"
+#    command     = "ansible-playbook -v playbooks/provision.yml"
+#  }
+#  depends_on = [null_resource.delay]
+#}

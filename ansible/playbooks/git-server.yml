@@ -2,6 +2,9 @@
 - hosts: tonos
   gather_facts: false
 
+  vars:
+    remote_config_path: /repos/{{ remote_config_repo_name }}.git
+
   tasks:
   - name: Get git-shell path
     changed_when: false
@@ -26,19 +29,11 @@
       shell: "{{ git_shell.stdout }}"
     tags: git
 
-  - name: Get public key
-    delegate_to: localhost
-    set_fact:
-      git_public_key: "{{ lookup('file', git_ssh_id_path + '.pub') }}"
-    tags:
-    - git
-    - git-authorized-keys
-
   - name: Append public key to known_hosts
     become: true
     authorized_key:
       user: git
-      key: "{{ git_public_key }}"
+      key: "{{ lookup('file', git_ssh_id_path + '.pub') }}"
     tags:
     - git
     - git-authorized-keys
@@ -68,22 +63,19 @@
     become: true
     become_user: git
     file:
-      name: /repos/{{ item }}.git
+      name: "{{ remote_config_path }}"
       state: directory
       mode: u=xrw,g=xr,o=x
-    with_items: "{{ git_server_repos|default([]) }}"
     tags:
     - git
     - git-repos
 
-  - name: Deploy bare git repos
+  - name: Initialize git repo
     become: true
     become_user: git
     command: git init --bare
     args:
-      chdir: /repos/{{ item }}.git
-      creates: /repos/{{ item }}.git/HEAD
-    with_items: "{{ git_server_repos|default([]) }}"
+      chdir: /repos/{{ remote_config_repo_name }}.git
     tags:
     - git
     - git-repos
