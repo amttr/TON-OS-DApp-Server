@@ -48,6 +48,7 @@ $ git clone https://github.com/amttr/tonos-config.git ~/tonos-config
 ### SSH keys
 
 You will need two keys: one for server access and other for git server access at server side. Or you can use single one for both for simplification.
+In a case of a dedicated server it is possible that you're already have one.
 
 1. Generate keys
     ```
