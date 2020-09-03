@@ -93,7 +93,8 @@ $ ./build_inventory.sh <server ip> \
 #### DigitalOcean
 
 1. Create an API token
-    [DO: Personal access token howto](https://www.digitalocean.com/docs/apis-clis/api/create-personal-access-token/))
+
+    [DO: Personal access token howto](https://www.digitalocean.com/docs/apis-clis/api/create-personal-access-token/)
 
 2. Choose your region, instance type and base image
 
@@ -133,7 +134,7 @@ $ ./build_inventory.sh <server ip> \
     ...
     ```
 
-    3. Create personal terraform variables file (`~/tonos-config/infra/digitalocean/terraform.tfvars`)
+3. Create personal terraform variables file (`~/tonos-config/infra/digitalocean/terraform.tfvars`)
 
     | Key | Description |
     | - | - |
