@@ -1,7 +1,6 @@
 # TON OS DApp Server configuration environment
 
 Repository contains automated configuration based on [TON OS DApp Server in TON blockchain](https://github.com/tonlabs/TON-OS-DApp-Server/) repository.
-Should be considered as a simple example of cloud/physical infrastucture instantiation and initial environment provision and deployment.
 
 ## System Requirements
 | Configuration | CPU (cores) | RAM (GiB) | Storage (GiB) | Network (Gbit/s)|
@@ -39,7 +38,20 @@ Consider latest versions:
 
 ## Usage
 
-### Clone this repo (or it's fork)
+### Fork
+
+This may look misleading but you need to keep your customized configuration somewhere under version control, e.g. in private repository.
+
+### Update environment
+
+The environment files are:
+- `./ansible/group_vars/tonos`. Here you should set your configuration single source of truth at `config_repo`
+- `./scripts/env.sh`
+
+
+### Clone
+
+_Note: you will probably need to clone your fork and not the original repository if you require any configuration update._
 
 ```
 $ git clone https://github.com/amttr/tonos-config.git ~/tonos-config
