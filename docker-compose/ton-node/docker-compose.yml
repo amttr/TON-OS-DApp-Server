@@ -1,7 +1,9 @@
 version: '2.2'
 services:
   node:
-    image: amttr/tonos-ton-node
+    build:
+      context: ./build
+    # image: "${NODE_IMAGE}"
     container_name: rnode
     restart: unless-stopped
     environment:
