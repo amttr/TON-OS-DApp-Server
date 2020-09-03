@@ -13,7 +13,7 @@ provider "digitalocean" {
 
 resource "digitalocean_ssh_key" "tonos" {
   name       = "tonos"
-  public_key = file(var.user_ssh_id_path)
+  public_key = file("${var.user_ssh_id_path}.pub")
 }
 
 resource "digitalocean_droplet" "tonos" {
