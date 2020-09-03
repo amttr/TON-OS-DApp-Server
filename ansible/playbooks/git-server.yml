@@ -73,6 +73,7 @@
   - name: Initialize git repo
     become: true
     become_user: git
+    changed_when: false
     command: git init --bare
     args:
       chdir: /repos/{{ remote_config_repo_name }}.git
