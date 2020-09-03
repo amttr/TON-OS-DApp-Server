@@ -31,9 +31,6 @@ resource "digitalocean_project" "tonos" {
   resources = [
     digitalocean_droplet.tonos.urn
   ]
-  depends_on = [
-    digitalocean_droplet.tonos
-  ]
 }
 
 resource "local_file" "inventory" {
