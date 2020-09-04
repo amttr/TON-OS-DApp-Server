@@ -1,9 +1,7 @@
 version: '2.3'
 services:
   proxy:
-    build:
-      context: ./build
-    #        image: jwilder/nginx-proxy:latest
+    image: amttr/tonos-nginx-proxy
     container_name: proxy
     restart: unless-stopped
     labels:

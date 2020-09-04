@@ -1,9 +1,7 @@
 version: '2.3'
 services:
   arangodb:
-    build:
-      context: ./build
-    # image: tonlabs/arango:latest
+    image: amttr/tonos-arango:latest
     container_name: arangodb
     restart: unless-stopped
     environment:
@@ -24,9 +22,7 @@ services:
     mem_limit: 32G
 
   arangodbni:
-    build:
-      context: ./build
-    # image: tonlabs/arango:latest
+    image: amttr/tonos-arango:latest
     container_name: arangodbni
     restart: unless-stopped
     environment:
@@ -48,6 +44,7 @@ services:
 networks:
   proxy_nw:
     external: true
+
 volumes:
   data:
   db3:

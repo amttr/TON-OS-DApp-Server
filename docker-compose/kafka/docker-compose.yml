@@ -117,8 +117,7 @@ services:
       - ./launch.sh:/etc/confluent/docker/launch
 
   check-connect:
-    build:
-      context: build_check
+    image: amttr/tonos-check-connect
     container_name: check-connect
     restart: unless-stopped
     depends_on:

@@ -1,9 +1,7 @@
 version: '2.3'
 services:
   q-server:
-    build:
-      context: ./build
-    # image: tonlabs/q-server:latest
+    image: amttr/tonos-q-server:latest
     container_name: q-server
     restart: unless-stopped
     environment:

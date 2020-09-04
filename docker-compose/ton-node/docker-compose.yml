@@ -1,9 +1,7 @@
 version: '2.2'
 services:
   node:
-    build:
-      context: ./build
-    # image: "${NODE_IMAGE}"
+    image: amttr/tonos-ton-node:latest
     container_name: rnode
     restart: unless-stopped
     environment:
@@ -34,8 +32,10 @@ services:
         max-file: "100"
     cap_add:
       - SYS_PTRACE
+
 networks:
   proxy_nw:
     external: true
+
 volumes:
   DB:
